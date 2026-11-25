@@ -12,11 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: leanprover/lean-action@v1
-        with:
-          toolchain: leanprover/lean4:stable
-          auto-config: false
-          build: false
+      - name: Install Lean 4 Stable
+        run: |
+          curl https://lean-lang.org -sSf | sh -s -- -y --default-toolchain stable
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
       - name: Compile and Audit Axioms (Pure Lean 4)
         run: |
           for file in theorems/*.lean; do
