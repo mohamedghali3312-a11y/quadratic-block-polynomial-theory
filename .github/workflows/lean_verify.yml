@@ -1,0 +1,29 @@
+name: Pure Polynomial Theory CI (Lean 4)
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  verify-pure-theory:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+      - name: Compile and Audit Axioms (Pure Lean 4)
+        run: |
+          for file in theorems/*.lean; do
+            echo "=== Checking $file ==="
+            lean "$file" | tee /tmp/axioms.txt
+            if grep -q "sorryAx" /tmp/axioms.txt; then
+              echo "ERROR: sorryAx detected in $file!"
+              exit 1
+            fi
+          done
+          echo "SUCCESS: All pure polynomial theorems verified with zero sorryAx."
