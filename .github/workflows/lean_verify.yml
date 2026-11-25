@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install Lean 4 Stable
         run: |
-          curl https://lean-lang.org -sSf | sh -s -- -y --default-toolchain stable
+          curl -sSf https://githubusercontent.com | sh -s -- -y --default-toolchain stable
           echo "$HOME/.elan/bin" >> $GITHUB_PATH
       - name: Compile and Audit Axioms (Pure Lean 4)
         run: |
